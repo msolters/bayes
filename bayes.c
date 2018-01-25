@@ -3,14 +3,17 @@
 float kappa0 = 1;
 float alpha0 = 1;
 float beta0 = 1;
-float mu0 = 0.5;
+float mu0 = 0.05;
+
+float mu;
+float kappa;
 
 /**
  *  Maintain a list of up to n samples
  *  And keep track of their average whenever one is added using
  *  add_datum(new_data_point).
  */
-#define MAX_DATA 20
+#define MAX_DATA 200
 float samples[MAX_DATA];        // data points in memory
 int d_n = 0;                    // # of data points entered
 int s_n = 0;                    // # of samples in memory
@@ -41,19 +44,23 @@ float _mu() {
 }
 
 float _kappa() {
-  return kappa0 + s_n;
+  return kappa0 + (float)s_n;
+}
+
+void process_datum(float datum)
+{
+  add_datum(datum);
+  mu = _mu();
+  kappa = _kappa();
 }
 
 int main()
 {
-  float mu;
-  float kappa;
-  for( int k=0; k<20; k++ )
+  for( int k=0; k<100; k++ )
   {
-    add_datum(k);
-    mu = _mu();
-    kappa = _kappa();
-    printf("%f\n", mu);
+    process_datum(0.02);
   }
+  process_datum(1);
+  printf("%f\n", mu);
   return 0;
 }
